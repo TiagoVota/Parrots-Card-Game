@@ -1,9 +1,46 @@
-/* Seção com o título */
-.header {
+/* Declaração de possíveis variáveis */
+:root {
     
 }
 
+/* Configurações gerais */
+body {
+    font-family: 'Roboto', sans-serif;
+    color: #75B79E;
+
+    background-color: #EEF9BF;
+
+    box-sizing: border-box;
+}
+
+
+/* Seção com o título */
+.header {
+    height: 150px;
+
+    font-size: 56px;
+    text-align: center;
+}
+
+
 /* Seção das cartas */
 .container {
+    margin: 0 10%;
+}
 
+.card {
+    width: 117px;
+    height: 146px;
+
+    border-radius: 5px;
+    border: 1px solid #99CEA8;
+    
+    background-color: #A7E9AF;
+}
+
+.card img {
+    width: 100px;
+    height: 100px;
+
+    padding: 24px 7px 22px 10px;
 }
