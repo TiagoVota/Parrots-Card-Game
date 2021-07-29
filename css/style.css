@@ -19,18 +19,27 @@ body {
     height: 150px;
 
     font-size: 56px;
-    text-align: center;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 
 /* Seção das cartas */
 .container {
     margin: 0 10%;
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
 }
 
 .card {
     width: 117px;
     height: 146px;
+
+    margin: 17px;
 
     border-radius: 5px;
     border: 1px solid #99CEA8;
