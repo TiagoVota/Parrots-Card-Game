@@ -1,55 +1,44 @@
-/* Declaração de possíveis variáveis */
-:root {
-    
-}
-
-/* Configurações gerais */
 body {
     font-family: 'Roboto', sans-serif;
     color: #75B79E;
-
     background-color: #EEF9BF;
-
     box-sizing: border-box;
 }
 
-
-/* Seção com o título */
-.header {
+header {
     height: 150px;
-
     font-size: 56px;
-
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-
-/* Seção das cartas */
-.container {
+main {
     margin: 0 10%;
-
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
+    justify-content: center;
 }
 
 .card {
     width: 117px;
     height: 146px;
-
     margin: 17px;
-
     border-radius: 5px;
     border: 1px solid #99CEA8;
-    
     background-color: #A7E9AF;
 }
 
 .card img {
     width: 100px;
     height: 100px;
-
     padding: 24px 7px 22px 10px;
+}
+
+.nao-irrita {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100px;
+    width: 100px;
 }

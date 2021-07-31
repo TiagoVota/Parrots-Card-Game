@@ -1,12 +1,17 @@
-/**
-* Essa função é showdi
-* @param {number} n1 é o primeiro número
-* @param {number} n2 é o segundo número
-* @return {number} a soma dos carinhas
-*/
-function teste(n1, n2) {
-    return n1 + n2
-}
+// Variáveis Globais
+let n_cards = 0
+
+const pathParrotGifs = [
+    '../assets/bobrossparrot.gif',
+    '../assets/explodyparrot.gif',
+    '../assets/fiestaparrot.gif',
+    '../assets/metalparrot.gif',
+    '../assets/revertitparrot.gif',
+    '../assets/tripletsparrot.gif',
+    '../assets/unicornparrot.gif'
+]
+
+// window.onload = askNumberCards
 
 
 function isValidAnswer(answer) {
@@ -20,7 +25,7 @@ function isValidAnswer(answer) {
         if (isEven) {
 
             // Verifica se a metade do número está entre 1 e 7
-            if (1 <= answer && answer <= 7) {
+            if (2 <= answer && answer <= 7) {
 
                 return true
             }
@@ -31,3 +36,26 @@ function isValidAnswer(answer) {
     return false
 }
 
+
+function askNumberCards() {
+    while (isValidAnswer(n_cards) !== true) {
+        n_cards = prompt("Escolha um número par de cartas entre 04 e 14!")
+    }
+}
+
+
+function random_number() {return Math.random()}
+
+
+function makeListOfGifs() {
+    const n_gifs = n_cards / 2
+
+    // Randomizar a ordem dos GIFs antes de escolher quais serão utilizados
+    let listOfGifs = pathParrotGifs.sort(random_number)
+
+    listOfGifs = [...listOfGifs[n_gifs], ...listOfGifs[n_gifs]]
+
+    listOfGifs.sort(random_number)
+
+    return listOfGifs
+}
