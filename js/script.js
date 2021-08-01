@@ -2,6 +2,17 @@
 let nCards = 0
 nCards = 14
 
+// lista que conterá dicionários com informações de cada carta
+const listCards = []
+
+
+// Informações da carta que está virada atualmente
+const flippedCard = {
+    haveFlippedCard: false,
+    idFlippedCard: -1
+}
+
+
 const parrotGifs = [
     'bobrossparrot.gif',
     'explodyparrot.gif',
@@ -66,6 +77,14 @@ function makeListOfGifs() {
 function flipCard(cardElement) {
     // Gira a carta adicionando/removendo o flip dela
     cardElement.classList.toggle('flip')
+
+    // Pega o Id para mudar o estado dentro do dicionário
+    const cardId = Number(cardElement.id)
+
+    listCards[cardId].isFlipped = true
+
+
+    console.log(listCards[cardId].isFlipped)
 }
 
 
@@ -86,15 +105,41 @@ function createCard(parrotGif, index) {
 }
 
 
-function createCards() {
-
-    // Cria lista com GIFs que serão utilizadas
-    const listOfGifs = makeListOfGifs()
-
+function createCards(listOfGifs) {
     // Adiciona cada uma das n cartas ao main
     for (let i=0; i<nCards; i++) {
         createCard(listOfGifs[i], i)
     }
 }
 
-createCards()
+
+function makeDictOfCards(listOfGifs) {
+    for (let i=0; i<nCards; i++) {
+        dictCard = {
+            name: listOfGifs[i],
+            id: i,
+            isFlipped: false
+        }
+
+        listCards.push(dictCard)
+    }
+
+    return listCards
+}
+
+
+function initializeGame() {
+    // Cria lista com GIFs que serão utilizadas
+    const listOfGifs = makeListOfGifs()
+
+    // Cria e distribui as cartas na tela
+    createCards(listOfGifs)
+
+    // Inicializa informações dos dicionários de cada carta
+    makeDictOfCards(listOfGifs)
+
+
+}
+
+
+initializeGame()
