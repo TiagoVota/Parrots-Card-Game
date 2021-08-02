@@ -155,10 +155,6 @@ function flipCard(cardElement, cardId) {
     // Vira a carta adicionando/removendo o flip dela
     cardElement.classList.toggle('flip')
 
-    console.log(`flipou do id ${cardId}`)
-    console.log(flippedCard)
-    console.log('')
-
     // Muda o estado de virada/não virada da carta
     listCards[cardId].isFlipped = !listCards[cardId].isFlipped
 
@@ -203,7 +199,6 @@ function gameReadyToFinalize() {
 
 
 function handleClick(cardElement) {
-    console.log(listCards)
 
     const cardId = Number(cardElement.id)
     
@@ -239,7 +234,7 @@ function handleClick(cardElement) {
 }
 
 
-function validReplay(replayAnswer) {
+function isValidReplay(replayAnswer) {
     const validAnswers = ['s', 'sim', 'yep', 'claro', 'com certeza']
 
     // CASO TENHA CANCELADO O PROMPT
@@ -254,13 +249,13 @@ function validReplay(replayAnswer) {
     return false
 }
 
-function askToReplay() {
+function readyToReplay() {
     const replayAnswer = prompt('LETS QUE LETS?!')
 
-    if (validReplay(replayAnswer)) {return true}
+    if (isValidReplay(replayAnswer)) {return true}
 
     // Caso a resposta não tenha sido válida, refaça a pergunta
-    askToReplay()
+    readyToReplay()
 }
 
 
@@ -273,14 +268,17 @@ function clearData() {
 
 
 function finalizeGame() {
+    // MOSTRAR RANKING DO LINDÃO
     alert('Parabéns, jogo Finalizado! Aqui está sua pontuação:')
 
-    if (askToReplay()) {
+    // DICAR PEDINDO SE QER JOGAR DE NOVO
+    readyToReplay()
 
-        // INICIALIZAR O JOGO
-        clearData()
-        startGame()
-    }
+    // Reseta informações do site
+    clearData()
+
+    //  Começa o jogo novamente
+    startGame()
 }
 
 
