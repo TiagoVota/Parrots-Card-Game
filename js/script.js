@@ -1,18 +1,4 @@
 // Variáveis Globais
-let nCards = 0
-nCards = 14
-
-// lista que conterá dicionários com informações de cada carta
-const listCards = []
-
-
-// Informações da carta que está virada atualmente
-const flippedCard = {
-    alreadyFlipped: false,
-    id: -1
-}
-
-
 const parrotGifs = [
     'bobrossparrot.gif',
     'explodyparrot.gif',
@@ -23,7 +9,27 @@ const parrotGifs = [
     'unicornparrot.gif'
 ]
 
-// window.onload = askCardsNumber
+
+let nCards = 0
+// nCards = 4
+
+
+let nCardsMatched = 0
+
+
+// lista que conterá dicionários com informações de cada carta
+let listCards = []
+
+
+// Informações da carta que está virada atualmente
+const flippedCard = {
+    alreadyFlipped: false,
+    id: -1
+}
+
+
+// let gameIsGoing = true
+
 
 
 function isValidAnswer(answer) {
@@ -39,6 +45,7 @@ function isValidAnswer(answer) {
             // Verifica se a metade do número está entre 1 e 7
             if (2 <= answer && answer <= 7) {
 
+                nCards = Number(nCards)
                 return true
             }
         }  
@@ -75,8 +82,8 @@ function makeListOfGifs() {
 }
 
 
-function createCard(parrotGif, index) {
-    mainElement = document.querySelector('main')
+function createCard(parrotGif, index, cardsSectionElement) {
+    
     
     // Conteúdo de cada carta
     cardElement = `<div class="card" id="${index}" onclick="handleClick(this)">
@@ -88,15 +95,17 @@ function createCard(parrotGif, index) {
         </div>
         </div>`
         
-    mainElement.innerHTML += cardElement
+    cardsSectionElement.innerHTML += cardElement
 }
 
 
 function createCards(listOfGifs) {
-    // Adiciona cada uma das n cartas ao main
+    const cardsSectionElement = document.querySelector('.cards-section')
+
+    // Adiciona cada uma das n cartas à seção das cartas
     for (let i=0; i<nCards; i++) {
 
-        createCard(listOfGifs[i], i)
+        createCard(listOfGifs[i], i, cardsSectionElement)
     }
 }
 
@@ -129,7 +138,15 @@ function initializeGame() {
     makeDictOfCards(listOfGifs)    
 }
 
-initializeGame()
+
+function startGame() {
+    // Pede com quantas cartas quer jogar
+    askCardsNumber()
+
+    // Inicializa o jogo
+    initializeGame()
+}
+
 
 
 
@@ -158,25 +175,36 @@ function resetFlippedCard() {
 function updateChosenCards(cardElement, cardId) {
     const idFlippedCard = flippedCard.id
     const FlippedCardElement = document.getElementById(`${idFlippedCard}`)
-
+    
     if (listCards[cardId].name === listCards[idFlippedCard].name) {
-
+        
         // Caso deu Match! (duas cartas iguais)
         listCards[cardId].itsAMatch = true
         listCards[idFlippedCard].itsAMatch = true
+        
+        nCardsMatched += 2
     } else {
-
+        
         // Caso elas sejam diferentes, espera 1seg e vira as duas
         setTimeout(() => {
             flipCard(FlippedCardElement, idFlippedCard)
             flipCard(cardElement, cardId)
         }, 1000)
     }
-
+    
     resetFlippedCard()
 }
 
+
+function gameReadyToFinalize() {
+    if (nCardsMatched === nCards) {return true}
+    return false
+}
+
+
 function handleClick(cardElement) {
+    console.log(listCards)
+
     const cardId = Number(cardElement.id)
     
     if (flippedCard.alreadyFlipped) {
@@ -203,4 +231,88 @@ function handleClick(cardElement) {
             flippedCard.id = cardId
         }
     }
+
+    // Ao final de cada clique verifica se o jogo já acabou
+    if (gameReadyToFinalize()) {
+        setTimeout(finalizeGame, 100)
+    }
 }
+
+
+function validReplay(replayAnswer) {
+    const validAnswers = ['s', 'sim', 'yep', 'claro', 'com certeza']
+
+    // CASO TENHA CANCELADO O PROMPT
+    if (replayAnswer === null) {return true}
+
+    // Tratando resposta e verificando se ela está na lista de possíveis respostas
+    replayAnswer = replayAnswer.toLocaleLowerCase()
+    if (validAnswers.includes(replayAnswer)) {
+
+        return true
+    }
+    return false
+}
+
+function askToReplay() {
+    const replayAnswer = prompt('LETS QUE LETS?!')
+
+    if (validReplay(replayAnswer)) {return true}
+
+    // Caso a resposta não tenha sido válida, refaça a pergunta
+    askToReplay()
+}
+
+
+function clearData() {
+    nCards = 0
+    nCardsMatched = 0
+    listCards = []
+    document.querySelector('.cards-section').innerHTML = ''
+}
+
+
+function finalizeGame() {
+    alert('Parabéns, jogo Finalizado! Aqui está sua pontuação:')
+
+    if (askToReplay()) {
+
+        // INICIALIZAR O JOGO
+        clearData()
+        startGame()
+    }
+}
+
+
+// // setTimeout(() => {
+// //     gameIsGoing = false
+// // }, 5000)
+// function renderGame() {
+//     // INICIALIZAR JOGO
+//     // initializeGame()
+//     let count = 0
+
+//     // ENQAUNTO O JOGO TIVER ROLANDO
+//     if (gameIsGoing) {
+//         setTimeout(() => {
+//             console.log('passou aqui!')
+//             renderGame()
+//         }, 500)
+//     } else {
+//         console.log('Bora jogar de novo?')
+
+//         prompt('hey?')
+//         console.log('hey é o caralho')
+//     }
+//     // DEIXA O JOGO ROLAAAR
+//     // // SE DENTRO MUDAR ISSO SAI DO LOOP
+
+//     // PEDIR SE QUER MAIS
+//     // TACAR UM RENDERGAME EDNTRO
+    
+// }
+// renderGame()
+
+
+
+window.onload = startGame
