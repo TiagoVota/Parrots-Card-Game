@@ -1,10 +1,8 @@
-.nao-irrita {
-    /* TIRAR ISSO AQUI DEPOIS */
-    position: fixed;
-    left: 0;
-    top: 0;
-    height: 100px;
-    width: 100px;
+:root {
+    --header-height: 150px;
+    --card-margin: 17px;
+    --clock-counters-dim: 70px;
+    --space-to-time-counter: 75%;
 }
 
 body {
@@ -15,7 +13,7 @@ body {
 }
 
 header {
-    height: 150px;
+    height: var(--header-height);
     font-size: 56px;
     display: flex;
     align-items: center;
@@ -23,23 +21,55 @@ header {
     text-align: center;
 }
 
-.clock {
-    width: 100px;
-    height: 100px;
-    background-color: red;
+.clock-container {
+    background-color: #080808;
     position: fixed;
     right: 0;
-    top: 0;
-    margin: 100px 20px 0 0;
+    top: calc(var(--header-height) + var(--card-margin) - var(--clock-counters-dim));
+    margin: 0px 20px 0 0;
+    border-radius: 5px;
     text-align: center;
     display: flex;
     align-items: center;
-    justify-content: center;    
+    justify-content: space-between;    
     /* AJUSTAR MELHOR ESSAS PARADAS */
 }
 
+.clock-counter {
+    width: calc(var(--clock-counters-dim) * 0.8);
+    height: calc(var(--clock-counters-dim) * 0.8);
+    padding: calc(var(--clock-counters-dim) * 0.1);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 1px 1px 5px rgba(255,255,255,.05), 0 1px 6px 2px rgba(0,0,0,.25);
+}
+
+.time {
+    height: var(--space-to-time-counter);  /* 75% */
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.time-type {    
+    height: calc(100% - var(--space-to-time-counter));
+    font-size: 10px;
+    color: #4d6d61;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+.clock-division {
+    font-size: 30px;
+    color: #4d6d61;
+}
+
 .cards-section {
-    margin: 0 10%;
+    margin: 5px 10% 0 10%;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -50,10 +80,10 @@ header {
 }
 
 .card {
-    z-index: 10;  /* Esse z-index é por causa de um bug que há com aparelhos IOS */
+    z-index: 1;  /* Esse z-index é por causa de um bug que há com aparelhos IOS */
     width: 117px;
     height: 146px;
-    margin: 17px;
+    margin: var(--card-margin);
     position: relative;
     cursor: pointer;
     transition: transform 1s;
@@ -86,6 +116,10 @@ header {
 
 
 @media (max-width: 600px) {
+    :root {
+        --clock-counters-dim: 50px;
+    }
+
     header {
         margin: 0 10%;
         font-size: 36px;
@@ -94,5 +128,9 @@ header {
     .cards-section {
         flex-direction: column;
         align-items: center;
+    }
+
+    .clock-container { 
+        margin-right: 10px;
     }
 }

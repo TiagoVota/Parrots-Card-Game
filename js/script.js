@@ -122,8 +122,18 @@ function makeDictOfCards(listOfGifs) {
 }
 
 
+function formatTime(time) {
+    if (time < 10) {
+        return '0' + time
+    }
+    return time
+}
+
+
 function countTime() {
-    const clockElement = document.querySelector('.clock')
+    // Pegamos os dois elementos que temos para a contagem do tempo,
+    // o de segundos e de minutos
+    const timeCountersElements = document.querySelectorAll('.time')
     
     // Reinicia contagem
     playerTime = 0
@@ -131,7 +141,14 @@ function countTime() {
     // Atualizará sempre o tempo do relógio com o tempo do jogador
     timeIsTicking = setInterval(() => {
         playerTime++
-        clockElement.innerHTML = `${playerTime}`
+
+        // Mudando os segundos
+        let timeSeconds = playerTime % 60
+        timeCountersElements[1].innerHTML = `${formatTime(timeSeconds)}`
+        
+        // Mudando os minutos
+        let timeMinutes = (playerTime - timeSeconds) / 60
+        timeCountersElements[0].innerHTML = `${formatTime(timeMinutes)}`
     }, 1000)
 }
 
