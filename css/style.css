@@ -23,6 +23,21 @@ header {
     text-align: center;
 }
 
+.clock {
+    width: 100px;
+    height: 100px;
+    background-color: red;
+    position: fixed;
+    right: 0;
+    top: 0;
+    margin: 100px 20px 0 0;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;    
+    /* AJUSTAR MELHOR ESSAS PARADAS */
+}
+
 .cards-section {
     margin: 0 10%;
     display: flex;

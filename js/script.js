@@ -11,25 +11,20 @@ const parrotGifs = [
 
 
 let nCards = 0
-// nCards = 4
-
-
 let nCardsMatched = 0
 
 
-let nMoves = 0
+let playerMoves = 0
+let playerTime = 0
 
 
 // lista que conterá dicionários com informações de cada carta
 let listCards = []
-
-
 // Informações da carta que está virada atualmente
 const flippedCard = {
     alreadyFlipped: false,
     id: -1
 }
-
 
 
 function isValidAnswer(answer) {
@@ -127,6 +122,20 @@ function makeDictOfCards(listOfGifs) {
 }
 
 
+function countTime() {
+    const clockElement = document.querySelector('.clock')
+    
+    // Reinicia contagem
+    playerTime = 0
+
+    // Atualizará sempre o tempo do relógio com o tempo do jogador
+    timeIsTicking = setInterval(() => {
+        playerTime++
+        clockElement.innerHTML = `${playerTime}`
+    }, 1000)
+}
+
+
 function initializeGame() {
     // Cria lista com GIFs que serão utilizadas
     const listOfGifs = makeListOfGifs()
@@ -135,7 +144,10 @@ function initializeGame() {
     createCards(listOfGifs)
     
     // Inicializa informações dos dicionários de cada carta
-    makeDictOfCards(listOfGifs)    
+    makeDictOfCards(listOfGifs)
+
+    // Começa a contagem de tempo
+    countTime()
 }
 
 
@@ -155,8 +167,6 @@ function flipCard(cardElement, cardId) {
 
     // Muda o estado de virada/não virada da carta
     listCards[cardId].isFlipped = !listCards[cardId].isFlipped
-
-    
 }
 
 
@@ -210,7 +220,7 @@ function handleClick(cardElement) {
         if (flippedCard.id !== cardId) {
 
             flipCard(cardElement, cardId)
-            nMoves += 1
+            playerMoves += 1
             
             // Verifica se temos uma dupla ou não e faz as alterações
             updateChosenCards(cardElement, cardId)
@@ -263,15 +273,18 @@ function readyToReplay() {
 function clearData() {
     nCards = 0
     nCardsMatched = 0
-    nMoves = 0
+    playerMoves = 0
     listCards = []
     document.querySelector('.cards-section').innerHTML = ''
 }
 
 
 function finalizeGame() {
+    // Finaliza contagem de tempo
+    clearInterval(timeIsTicking)  // Calm down Rabbit, my friend
+
     // MOSTRAR RANKING DO LINDÃO
-    alert(`Parabéns! Jogo finalizado em ${nMoves} movimentos!`)
+    alert(`Parabéns! Jogo finalizado em ${playerMoves} movimentos e em ${playerTime} segundos!`)
 
     // Pede se quer jogar novamente
     readyToReplay()
