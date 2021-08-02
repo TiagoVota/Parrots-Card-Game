@@ -35,6 +35,7 @@ main {
 }
 
 .card {
+    z-index: 10;  /* Esse z-index é por causa de um bug que há com aparelhos IOS */
     width: 117px;
     height: 146px;
     margin: 17px;
@@ -51,7 +52,6 @@ main {
 }
 
 .card.flip {
-    z-index: 10;  /* Esse z-index é por causa de um bug que há com aparelhos IOS */
     transform: rotateY(180deg);
 }
 
