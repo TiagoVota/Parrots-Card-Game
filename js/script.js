@@ -17,6 +17,9 @@ let nCards = 0
 let nCardsMatched = 0
 
 
+let nMoves = 0
+
+
 // lista que conterá dicionários com informações de cada carta
 let listCards = []
 
@@ -26,9 +29,6 @@ const flippedCard = {
     alreadyFlipped: false,
     id: -1
 }
-
-
-// let gameIsGoing = true
 
 
 
@@ -148,8 +148,6 @@ function startGame() {
 }
 
 
-
-
 function flipCard(cardElement, cardId) {
 
     // Vira a carta adicionando/removendo o flip dela
@@ -205,11 +203,14 @@ function handleClick(cardElement) {
     if (flippedCard.alreadyFlipped) {
         
         //  Caso tenha alguma carta já virada
+        // Caso tenha escolhido uma carta que já deu match, ignore
         if (listCards[cardId].itsAMatch) {return}
         
         // Verifica se clicou numa carta diferente (de id) da anterior
         if (flippedCard.id !== cardId) {
+
             flipCard(cardElement, cardId)
+            nMoves += 1
             
             // Verifica se temos uma dupla ou não e faz as alterações
             updateChosenCards(cardElement, cardId)
@@ -250,7 +251,7 @@ function isValidReplay(replayAnswer) {
 }
 
 function readyToReplay() {
-    const replayAnswer = prompt('LETS QUE LETS?!')
+    const replayAnswer = prompt('Jogar novamente?')
 
     if (isValidReplay(replayAnswer)) {return true}
 
@@ -262,6 +263,7 @@ function readyToReplay() {
 function clearData() {
     nCards = 0
     nCardsMatched = 0
+    nMoves = 0
     listCards = []
     document.querySelector('.cards-section').innerHTML = ''
 }
@@ -269,9 +271,9 @@ function clearData() {
 
 function finalizeGame() {
     // MOSTRAR RANKING DO LINDÃO
-    alert('Parabéns, jogo Finalizado! Aqui está sua pontuação:')
+    alert(`Parabéns! Jogo finalizado em ${nMoves} movimentos!`)
 
-    // DICAR PEDINDO SE QER JOGAR DE NOVO
+    // Pede se quer jogar novamente
     readyToReplay()
 
     // Reseta informações do site
@@ -280,37 +282,6 @@ function finalizeGame() {
     //  Começa o jogo novamente
     startGame()
 }
-
-
-// // setTimeout(() => {
-// //     gameIsGoing = false
-// // }, 5000)
-// function renderGame() {
-//     // INICIALIZAR JOGO
-//     // initializeGame()
-//     let count = 0
-
-//     // ENQAUNTO O JOGO TIVER ROLANDO
-//     if (gameIsGoing) {
-//         setTimeout(() => {
-//             console.log('passou aqui!')
-//             renderGame()
-//         }, 500)
-//     } else {
-//         console.log('Bora jogar de novo?')
-
-//         prompt('hey?')
-//         console.log('hey é o caralho')
-//     }
-//     // DEIXA O JOGO ROLAAAR
-//     // // SE DENTRO MUDAR ISSO SAI DO LOOP
-
-//     // PEDIR SE QUER MAIS
-//     // TACAR UM RENDERGAME EDNTRO
-    
-// }
-// renderGame()
-
 
 
 window.onload = startGame
