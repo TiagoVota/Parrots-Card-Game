@@ -51,6 +51,7 @@ function isValidAnswer(answer) {
 
 function askCardsNumber() {
     while (isValidAnswer(nCards) !== true) {
+
         nCards = prompt("Escolha um número par de cartas entre 04 e 14 :3")
     }
 }
@@ -94,6 +95,7 @@ function createCard(parrotGif, index) {
 function createCards(listOfGifs) {
     // Adiciona cada uma das n cartas ao main
     for (let i=0; i<nCards; i++) {
+
         createCard(listOfGifs[i], i)
     }
 }
@@ -101,6 +103,7 @@ function createCards(listOfGifs) {
 
 function makeDictOfCards(listOfGifs) {
     for (let i=0; i<nCards; i++) {
+
         dictCard = {
             name: listOfGifs[i],
             id: i,
@@ -123,9 +126,7 @@ function initializeGame() {
     createCards(listOfGifs)
     
     // Inicializa informações dos dicionários de cada carta
-    makeDictOfCards(listOfGifs)
-    
-    
+    makeDictOfCards(listOfGifs)    
 }
 
 initializeGame()
@@ -133,17 +134,15 @@ initializeGame()
 
 
 function flipCard(cardElement, cardId) {
-    // Caso já tenha escolhido duas iguais
-    if (listCards[cardId].itsAMatch) {return}
 
     // Vira a carta adicionando/removendo o flip dela
     cardElement.classList.toggle('flip')
-    // console.log('flip!')
 
     console.log(`flipou do id ${cardId}`)
     console.log(flippedCard)
     console.log('')
 
+    // Muda o estado de virada/não virada da carta
     listCards[cardId].isFlipped = !listCards[cardId].isFlipped
 
     
@@ -159,11 +158,12 @@ function resetFlippedCard() {
 function updateChosenCards(cardElement, cardId) {
     const idFlippedCard = flippedCard.id
     const FlippedCardElement = document.getElementById(`${idFlippedCard}`)
+
     if (listCards[cardId].name === listCards[idFlippedCard].name) {
-        // APERTEI EM DUAS IGUAIS
+
+        // Caso deu Match! (duas cartas iguais)
         listCards[cardId].itsAMatch = true
         listCards[idFlippedCard].itsAMatch = true
-
     } else {
 
         // Caso elas sejam diferentes, espera 1seg e vira as duas
@@ -179,29 +179,28 @@ function updateChosenCards(cardElement, cardId) {
 function handleClick(cardElement) {
     const cardId = Number(cardElement.id)
     
-    //  TEM ALGUMA JÁ FLIPPADA?
     if (flippedCard.alreadyFlipped) {
         
-        // cliquei numa diferente?
+        //  Caso tenha alguma carta já virada
+        if (listCards[cardId].itsAMatch) {return}
+        
+        // Verifica se clicou numa carta diferente (de id) da anterior
         if (flippedCard.id !== cardId) {
             flipCard(cardElement, cardId)
             
-            // VAI ANALIZAR E FAZER AS DEVIDAS MUDANÇAS
+            // Verifica se temos uma dupla ou não e faz as alterações
             updateChosenCards(cardElement, cardId)
-            // SE FOR IGUAL --> MANTÉM VIRADA PRA CIMA
-            
-            // SE FOR DIFERENTE --> DESVIREM
         }
     } else {
         
-        flipCard(cardElement, cardId)
-        // CASO NÃO TENHA NENHUMA VIRADA
+        // Caso não haja nenhuma carta virada
         if (!listCards[cardId].itsAMatch) {
+            
+            // Caso não tenha apertado numa carta que já deu match
+            flipCard(cardElement, cardId)
 
-            // CASO VOCÊ NÃO TENHA CLICADO NUM MATCH
             flippedCard.alreadyFlipped = true
             flippedCard.id = cardId
         }
     }
-    
 }

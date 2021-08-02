@@ -51,6 +51,7 @@ main {
 }
 
 .card.flip {
+    z-index: 10;  /* Esse z-index é por causa de um bug que há com aparelhos IOS */
     transform: rotateY(180deg);
 }
 
