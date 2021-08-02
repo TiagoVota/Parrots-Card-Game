@@ -1,4 +1,6 @@
-// Variáveis Globais
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+// -=-=-=-=-=-=-=-=-=-= Variáveis Globais =-=-=-=-=-=-=-=-=-=-
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 const parrotGifs = [
     'bobrossparrot.gif',
     'explodyparrot.gif',
@@ -9,23 +11,25 @@ const parrotGifs = [
     'unicornparrot.gif'
 ]
 
-
 let nCards = 0
 let nCardsMatched = 0
-
 
 let playerMoves = 0
 let playerTime = 0
 
-
 // lista que conterá dicionários com informações de cada carta
 let listCards = []
+
 // Informações da carta que está virada atualmente
 const flippedCard = {
     alreadyFlipped: false,
     id: -1
 }
 
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+// -=-=-=-=-=-=-=-=-=-=-=-=- Funções -=-=-=-=-=-=-=-=-=-=-=-=-
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 function isValidAnswer(answer) {
     answer = Number(answer)  // Vê o estado numérico da resposta
@@ -37,7 +41,7 @@ function isValidAnswer(answer) {
         const isEven = parseInt(answer, 10) == answer
         if (isEven) {
 
-            // Verifica se a metade do número está entre 1 e 7
+            // Verifica se a metade do número está entre 2 e 7
             if (2 <= answer && answer <= 7) {
 
                 nCards = Number(nCards)
@@ -78,8 +82,6 @@ function makeListOfGifs() {
 
 
 function createCard(parrotGif, index, cardsSectionElement) {
-    
-    
     // Conteúdo de cada carta
     cardElement = `<div class="card" id="${index}" onclick="handleClick(this)">
         <div class="card-faces">
@@ -132,11 +134,13 @@ function formatTime(time) {
 
 function countTime() {
     // Pegamos os dois elementos que temos para a contagem do tempo,
-    // o de segundos e de minutos
+    // o de minutos e de segundos
     const timeCountersElements = document.querySelectorAll('.time')
     
-    // Reinicia contagem
+    // Reinicia contagem e display do tempo na tela
     playerTime = 0
+    timeCountersElements[0].innerHTML = '00'
+    timeCountersElements[1].innerHTML = '00'
 
     // Atualizará sempre o tempo do relógio com o tempo do jogador
     timeIsTicking = setInterval(() => {
@@ -153,7 +157,7 @@ function countTime() {
 }
 
 
-function initializeGame() {
+function initializeData() {
     // Cria lista com GIFs que serão utilizadas
     const listOfGifs = makeListOfGifs()
 
@@ -172,8 +176,8 @@ function startGame() {
     // Pede com quantas cartas quer jogar
     askCardsNumber()
 
-    // Inicializa o jogo
-    initializeGame()
+    // Inicializa as informações do jogo
+    initializeData()
 }
 
 
@@ -194,21 +198,22 @@ function resetFlippedCard() {
 
 
 function updateChosenCards(cardElement, cardId) {
-    const idFlippedCard = flippedCard.id
-    const FlippedCardElement = document.getElementById(`${idFlippedCard}`)
+    // Essa função parte do fato de já ter uma carta virada e você acabou de escolher outra para virar
+    const flippedCardId = flippedCard.id
+    const flippedCardElement = document.getElementById(`${flippedCardId}`)
     
-    if (listCards[cardId].name === listCards[idFlippedCard].name) {
+    if (listCards[cardId].name === listCards[flippedCardId].name) {
         
         // Caso deu Match! (duas cartas iguais)
         listCards[cardId].itsAMatch = true
-        listCards[idFlippedCard].itsAMatch = true
+        listCards[flippedCardId].itsAMatch = true
         
         nCardsMatched += 2
     } else {
         
         // Caso elas sejam diferentes, espera 1seg e vira as duas
         setTimeout(() => {
-            flipCard(FlippedCardElement, idFlippedCard)
+            flipCard(flippedCardElement, flippedCardId)
             flipCard(cardElement, cardId)
         }, 1000)
     }
@@ -218,7 +223,7 @@ function updateChosenCards(cardElement, cardId) {
 
 
 function gameReadyToFinalize() {
-    if (nCardsMatched === nCards) {return true}
+    if (nCardsMatched === nCards) { return true }
     return false
 }
 
@@ -229,9 +234,8 @@ function handleClick(cardElement) {
     
     if (flippedCard.alreadyFlipped) {
         
-        //  Caso tenha alguma carta já virada
         // Caso tenha escolhido uma carta que já deu match, ignore
-        if (listCards[cardId].itsAMatch) {return}
+        if (listCards[cardId].itsAMatch) { return }
         
         // Verifica se clicou numa carta diferente (de id) da anterior
         if (flippedCard.id !== cardId) {
@@ -239,15 +243,14 @@ function handleClick(cardElement) {
             flipCard(cardElement, cardId)
             playerMoves += 1
             
-            // Verifica se temos uma dupla ou não e faz as alterações
+            // Verifica se temos uma dupla ou não e faz a lógica envolvida
             updateChosenCards(cardElement, cardId)
         }
     } else {
         
-        // Caso não haja nenhuma carta virada
+        // Caso não haja nenhuma carta virada e não tenha apertado numa carta que já deu match
         if (!listCards[cardId].itsAMatch) {
             
-            // Caso não tenha apertado numa carta que já deu match
             flipCard(cardElement, cardId)
 
             flippedCard.alreadyFlipped = true
@@ -257,33 +260,37 @@ function handleClick(cardElement) {
 
     // Ao final de cada clique verifica se o jogo já acabou
     if (gameReadyToFinalize()) {
+
+        // Se sim, gera um delay para a última carta poder virar
         setTimeout(finalizeGame, 100)
     }
 }
 
 
 function isValidReplay(replayAnswer) {
-    const validAnswers = ['s', 'sim', 'yep', 'claro', 'com certeza']
+    const validConfirms = ['s', 'sim', 'yes', 'y', 'yep', 'claro', 'com certeza']
+    const validNegations = ['n', 'não', 'no', 'nops', 'nem', 'to de buenas']
 
-    // CASO TENHA CANCELADO O PROMPT
-    if (replayAnswer === null) {return true}
+    // Caso tenha simplesmente fechado o prompt
+    if (replayAnswer === null) { return [true, 'cancel'] }
 
     // Tratando resposta e verificando se ela está na lista de possíveis respostas
     replayAnswer = replayAnswer.toLocaleLowerCase()
-    if (validAnswers.includes(replayAnswer)) {
+    if (validConfirms.includes(replayAnswer)) { return [true, 'confirm'] }
+    else if (validNegations.includes(replayAnswer)) { return [true, 'cancel'] }
 
-        return true
-    }
-    return false
+    // Caso a resposta seja inválida
+    return [false]
 }
 
 function readyToReplay() {
-    const replayAnswer = prompt('Jogar novamente?')
+    const replayAnswer = prompt('Jogar novamente? Digite \'s\' ou \'n\'!')
 
-    if (isValidReplay(replayAnswer)) {return true}
+    const answerToReplay = isValidReplay(replayAnswer)
+    if (answerToReplay[0]) { return answerToReplay[1] }
 
     // Caso a resposta não tenha sido válida, refaça a pergunta
-    readyToReplay()
+    return readyToReplay()
 }
 
 
@@ -300,11 +307,12 @@ function finalizeGame() {
     // Finaliza contagem de tempo
     clearInterval(timeIsTicking)  // Calm down Rabbit, my friend
 
-    // MOSTRAR RANKING DO LINDÃO
+    // Mostrar resultado do player
     alert(`Parabéns! Jogo finalizado em ${playerMoves} movimentos e em ${playerTime} segundos!`)
 
-    // Pede se quer jogar novamente
-    readyToReplay()
+    // Pede se quer jogar novamente e verifica sua resposta
+    const isReadyToReplay = readyToReplay()
+    if (isReadyToReplay === 'cancel') { return }
 
     // Reseta informações do site
     clearData()
@@ -314,4 +322,9 @@ function finalizeGame() {
 }
 
 
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+// -=-=-=-=-=-=-=-=-=-=-= Inicialização =-=-=-=-=-=-=-=-=-=-=-
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+// Quando a página estiver carregada, inicia o jogo!
 window.onload = startGame

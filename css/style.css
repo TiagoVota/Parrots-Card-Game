@@ -3,6 +3,7 @@
     --card-margin: 17px;
     --clock-counters-dim: 70px;
     --space-to-time-counter: 75%;
+    --clock-subtitle-color: #4d6d61;
 }
 
 body {
@@ -25,6 +26,7 @@ header {
     background-color: #080808;
     position: fixed;
     right: 0;
+    /* Quero que o top \/ esteja entre o título e a seção de cartas */
     top: calc(var(--header-height) + var(--card-margin) - var(--clock-counters-dim));
     margin: 0px 20px 0 0;
     border-radius: 5px;
@@ -32,7 +34,6 @@ header {
     display: flex;
     align-items: center;
     justify-content: space-between;    
-    /* AJUSTAR MELHOR ESSAS PARADAS */
 }
 
 .clock-counter {
@@ -55,17 +56,15 @@ header {
 .time-type {    
     height: calc(100% - var(--space-to-time-counter));
     font-size: 10px;
-    color: #4d6d61;
+    color: var(--clock-subtitle-color);
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-
-
 .clock-division {
     font-size: 30px;
-    color: #4d6d61;
+    color: var(--clock-subtitle-color);
 }
 
 .cards-section {
@@ -73,10 +72,6 @@ header {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-}
-
-.hidden {
-    display: none;
 }
 
 .card {
